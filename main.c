@@ -37,11 +37,20 @@ const int block_l_b[3][3]   =  {{0,1,1},
                                 {0,1,0},
                                 {0,1,0}};
 
-void mat_3x3_rotate_right(int **in, int **out) {
-    out = (int[3][3])  {{in[2][0], in[1][0], in[0][0]},
-                        {in[2][1], in[1][1], in[0][1]},
-                        {in[2][2], in[1][2], in[0][2]}};
+void mat_3x3_rotate_right(int in[3][3], int out[3][3]) {
+    int tmp[3][3] = {{in[2][0], in[1][0], in[0][0]},
+                     {in[2][1], in[1][1], in[0][1]},
+                     {in[2][2], in[1][2], in[0][2]}};
+    memcpy(out, tmp, 9*sizeof(int));
 }
+
+void mat_3x3_rotate_left(int in[3][3], int out[3][3]) {
+    int tmp[3][3] = {{in[0][2], in[1][2], in[2][2]},
+                     {in[0][1], in[1][1], in[2][1]},
+                     {in[0][0], in[1][0], in[2][0]}};
+    memcpy(out, tmp, 9*sizeof(int));
+}
+
 
 // ===========================================================================
 // platform-specific io functions 
@@ -61,7 +70,6 @@ typedef enum io_key_type {
 int io_get_key_state(io_key_type_t key) {
     return ((GetKeyState(key) & 0x80) == 0x80);
 }
-
 
 // ===========================================================================
 // platform-specific timing functions
@@ -95,6 +103,15 @@ int64_t wait_for_next_frame(uint64_t last_frame_start, int game_speed_hz) {
     } 
 
     return delay_time_us;
+}
+
+void print_piece(int piece[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for ( int j = 0; j < 3; j++ ) {
+            printf(piece[i][j]? "#" : " ");
+        }
+        printf("\n");
+    }
 }
 
 int main() {
