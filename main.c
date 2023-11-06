@@ -9,48 +9,159 @@
 // ===========================================================================
 // tetris blocks
 
-const int block_square[3][3] = {{0,0,0},
-                                {1,1,0},
-                                {1,1,0}};
+const int __block_square[4][16] = { {0,0,0,0,
+                                     0,1,1,0,
+                                     0,1,1,0,
+                                     0,0,0,0},
+                                    {0,0,0,0,
+                                     0,1,1,0,
+                                     0,1,1,0,
+                                     0,0,0,0},
+                                    {0,0,0,0,
+                                     0,1,1,0,
+                                     0,1,1,0,
+                                     0,0,0,0},
+                                    {0,0,0,0,
+                                     0,1,1,0,
+                                     0,1,1,0,
+                                     0,0,0,0}};
 
-const int block_t[3][3]     =  {{0,1,0},
-                                {1,1,1},
-                                {0,0,0}};
+const int __block_t[4][16] =  {{0,1,0,0,
+                                1,1,1,0,
+                                0,0,0,0,
+                                0,0,0,0},
+                               {0,1,0,0,
+                                0,1,1,0,
+                                0,1,0,0,
+                                0,0,0,0},
+                               {0,0,0,0,
+                                1,1,1,0,
+                                0,1,0,0,
+                                0,0,0,0},
+                               {0,1,0,0,
+                                1,1,0,0,
+                                0,1,0,0,
+                                0,0,0,0}};
+                            
+const int __block_line[4][16] = {{0,0,1,0,
+                                  0,0,1,0,
+                                  0,0,1,0,
+                                  0,0,1,0},
+                                 {0,0,0,0,
+                                  1,1,1,1,
+                                  0,0,0,0,
+                                  0,0,0,0},
+                                 {0,0,1,0,
+                                  0,0,1,0,
+                                  0,0,1,0,
+                                  0,0,1,0},
+                                 {0,0,0,0,
+                                  1,1,1,1,
+                                  0,0,0,0,
+                                  0,0,0,0}};
 
-const int block_line[3][3]  =  {{0,1,0},
-                                {0,1,0},
-                                {0,1,0}};
+const int __block_z_a[4][16] = {{0,1,0,0,
+                                 0,1,1,0,
+                                 0,0,1,0,
+                                 0,0,0,0},
+                                {0,0,0,0,
+                                 0,1,1,0,
+                                 1,1,0,0,
+                                 0,0,0,0},
+                                {1,0,0,0,
+                                 1,1,0,0,
+                                 0,1,0,0,
+                                 0,0,0,0},
+                                {0,1,1,0,
+                                 1,1,0,0,
+                                 0,0,0,0,
+                                 0,0,0,0}};
 
-const int block_z_a[3][3]   =  {{1,0,0},
-                                {1,1,0},
-                                {0,1,0}};
+const int __block_z_b[4][16] = {{0,0,1,0,
+                                 0,1,1,0,
+                                 0,1,0,0,
+                                 0,0,0,0},
+                                {1,1,0,0,
+                                 0,1,1,0,
+                                 0,0,0,0,
+                                 0,0,0,0},
+                                {0,0,1,0,
+                                 0,1,1,0,
+                                 0,1,0,0,
+                                 0,0,0,0},
+                                {1,1,0,0,
+                                 0,1,1,0,
+                                 0,0,0,0,
+                                 0,0,0,0}};
 
-const int block_z_b[3][3]   =  {{0,0,1},
-                                {0,1,1},
-                                {0,1,0}};
+const int __block_l_a[4][16] = {{1,1,0,0,
+                                 0,1,0,0,
+                                 0,1,0,0,
+                                 0,0,0,0},
+                                {0,0,0,0,
+                                 1,1,1,0,
+                                 1,0,0,0,
+                                 0,0,0,0},
+                                {0,1,0,0,
+                                 0,1,0,0,
+                                 0,1,1,0,
+                                 0,0,0,0},
+                                {0,0,1,0,
+                                 1,1,1,0,
+                                 0,0,0,0,
+                                 0,0,0,0}};
 
-const int block_l_a[3][3]   =  {{1,1,0},
-                                {0,1,0},
-                                {0,1,0}};
+const int __block_l_b[4][16] = {{0,1,1,0,
+                                 0,1,0,0,
+                                 0,1,0,0,
+                                 0,0,0,0},
+                                {0,0,0,0,
+                                 1,1,1,0,
+                                 0,0,1,0,
+                                 0,0,0,0},
+                                {0,1,0,0,
+                                 0,1,0,0,
+                                 1,1,0,0,
+                                 0,0,0,0},
+                                {1,0,0,0,
+                                 1,1,1,0,
+                                 0,0,0,0,
+                                 0,0,0,0}};
 
-const int block_l_b[3][3]   =  {{0,1,1},
-                                {0,1,0},
-                                {0,1,0}};
+typedef enum tetramino_t {
+    square_tetramino = 0,
+    t_tetramino,
+    L_left_tetramino,
+    L_right_tetramino,
+    z_left_tetramino,
+    z_right_tetramino,
+    line_tetramino
+} tetramino_t;
 
-void mat_3x3_rotate_right(int in[3][3], int out[3][3]) {
-    int tmp[3][3] = {{in[2][0], in[1][0], in[0][0]},
-                     {in[2][1], in[1][1], in[0][1]},
-                     {in[2][2], in[1][2], in[0][2]}};
-    memcpy(out, tmp, 9*sizeof(int));
+const int *tetramino_ptr_from_id(tetramino_t id, int rotation) {
+    switch(id) {
+        case (square_tetramino) : { return __block_square[rotation]; }
+        case (t_tetramino) : { return __block_t[rotation]; }
+        case (L_left_tetramino) : { return __block_l_a[rotation]; }
+        case (L_right_tetramino) : { return __block_l_b[rotation]; }
+        case (z_left_tetramino) : { return __block_z_a[rotation]; }
+        case (z_right_tetramino) : { return __block_z_b[rotation]; }
+        case (line_tetramino) : { return __block_line[rotation]; }
+        default: { return NULL; }
+    }
 }
 
-void mat_3x3_rotate_left(int in[3][3], int out[3][3]) {
-    int tmp[3][3] = {{in[0][2], in[1][2], in[2][2]},
-                     {in[0][1], in[1][1], in[2][1]},
-                     {in[0][0], in[1][0], in[2][0]}};
-    memcpy(out, tmp, 9*sizeof(int));
-}
+// ===========================================================================
+// platform-specific variable definitions
 
+#define GAME_WIDTH 10
+#define GAME_HEIGHT 20
+
+uint8_t __board[GAME_WIDTH*GAME_HEIGHT];
+
+uint8_t get_board_at(int row, int col) {
+    return __board[((row*GAME_WIDTH)%GAME_HEIGHT) + (col%GAME_WIDTH)];
+}
 
 // ===========================================================================
 // platform-specific io functions 
@@ -77,7 +188,7 @@ int io_get_key_state(io_key_type_t key) {
 uint64_t timing_get_us_64() {
     
     struct timeval tv;
-    gettimeofday(&tv, NULL);
+    mingw_gettimeofday(&tv, NULL);
 
     return (uint64_t)((tv.tv_sec*1000000)+(tv.tv_usec));
 
@@ -89,6 +200,47 @@ void timing_delay_us(uint64_t t_us) {
 
     while ( t_cur < t_loop_exit ) { t_cur = timing_get_us_64(); }
 }
+
+// ===========================================================================
+// game declarations
+
+typedef struct board_t {
+
+    int width;
+    int height;
+
+    uint8_t *raw;
+
+} board_t;
+
+typedef struct {
+
+    // ==================================================
+    // timing data
+
+    // frames per second
+    int fps;
+
+    // number of frames that occur between blocks moving
+    int piece_speed;
+
+    // ==================================================
+    // game data
+    
+    int score;
+    int level;  
+
+    board_t board;
+
+    tetramino_t active_piece_type;
+    int active_piece_rotation_idx;
+    int *active_piece;
+
+    // x/y coordinates of the top-left corner of the piece
+    int piece_row;
+    int piece_col;
+
+} game_inst_t;
 
 // ===========================================================================
 // game functions
@@ -105,17 +257,52 @@ int64_t wait_for_next_frame(uint64_t last_frame_start, int game_speed_hz) {
     return delay_time_us;
 }
 
-void print_piece(int piece[3][3]) {
-    for (int i = 0; i < 3; i++) {
-        for ( int j = 0; j < 3; j++ ) {
-            printf(piece[i][j]? "#" : " ");
+void print_piece(int piece[16]) {
+    for (int i = 0; i < 4; i++) {
+        for ( int j = 0; j < 4; j++ ) {
+            printf(piece[i*4+j]? "#" : " ");
         }
         printf("\n");
     }
 }
 
-int main() {
+void game_loop(game_inst_t *inst) {
 
+    // check player input
+
+    // TODO:
+    // check to see if the desired rotation is legal
+
+    int key_lr_dir = ( io_get_key_state(io_key_type_right) - io_get_key_state(io_key_type_left) );
+    int rot_dir_change = io_get_key_state(io_key_type_up);
+
+    // update active piece
+    inst->active_piece_rotation_idx += rot_dir_change;
+    inst->active_piece = tetramino_ptr_from_id(inst->active_piece_type, inst->active_piece_rotation_idx);
+
+
+}
+
+// ===========================================================================
+// variables
+
+game_inst_t game_inst = {
+    .fps = 40,
+    .piece_speed = 20,
+    .score = 0,
+    .level = 0,
+    .board = { 
+        .width=GAME_WIDTH, 
+        .height=GAME_HEIGHT, 
+        .raw=__board 
+    }
+};
+
+// ===========================================================================
+// platform-specific execution
+
+int main() {
     
+
 
 } 
